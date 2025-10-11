@@ -1,12 +1,12 @@
-#include <img_lib.h>
-#include <jpeg_image.h>
-#include <ppm_image.h>
-#include <bmp_image.h>
 
 #include <filesystem>
-#include <memory>
-#include <string_view>
 #include <iostream>
+#include <string_view>
+
+#include <bmp_image.h>
+#include <jpeg_image.h>
+#include <img_lib.h>
+#include <ppm_image.h>
 
 using namespace std;
 
@@ -31,6 +31,7 @@ Format GetFormatByExtension(const img_lib::Path& input_file) {
 
 class ImageFormatInterface {
 public:
+    virtual ~ImageFormatInterface() = default;
     virtual bool SaveImage(const img_lib::Path& file, const img_lib::Image& image) const = 0;
     virtual img_lib::Image LoadImage(const img_lib::Path& file) const = 0;
 };

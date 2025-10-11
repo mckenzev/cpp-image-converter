@@ -32,6 +32,7 @@ public:
     Color GetPixel(int x, int y) const {
         return const_cast<Image*>(this)->GetPixel(x, y);
     }
+    
     Color& GetPixel(int x, int y) {
         assert(x < GetWidth() && y < GetHeight() && x >= 0 && y >= 0);
         return GetLine(y)[x];
