@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <cassert>
 #include <cstddef>
 #include <vector>
@@ -22,7 +21,6 @@ struct Color {
 
 class Image {
 public:
-    // создаёт пустое изображение
     Image() = default;
 
     // создаёт изображение заданного размера, заполняя его заданным цветом

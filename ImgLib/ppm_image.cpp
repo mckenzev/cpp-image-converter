@@ -14,9 +14,7 @@ static const int PPM_MAX = 255;
 bool SavePPM(const Path& file, const Image& image) {
     ofstream out(file, ios::binary);
 
-    if (!out) {
-        return false;
-    }
+    if (!out) return false;
     
     int w = image.GetWidth();
     int h = image.GetHeight();
@@ -27,9 +25,7 @@ bool SavePPM(const Path& file, const Image& image) {
     
     out << header.str();
 
-    if (!out) {
-        return false;
-    }
+    if (!out) return false;
 
     vector<unsigned char> buffer(w * 3);
     for (int i = 0; i < h; ++i) {
@@ -43,24 +39,25 @@ bool SavePPM(const Path& file, const Image& image) {
 
         out.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
 
-        if (!out) {
-            return false;
-        }
+        if (!out) return false;
     }
 
     return true;
 }
 
 Image LoadPPM(const Path& file) {
-    // открываем поток с флагом ios::binary
-    // поскольку будем читать даные в двоичном формате
     ifstream ifs(file, ios::binary);
+    
+    if (!ifs) return {};
+
     std::string sign;
     int w, h, color_max;
 
     // читаем заголовок: он содержит формат, размеры изображения
     // и максимальное значение цвета
     ifs >> sign >> w >> h >> color_max;
+
+    if (!ifs) return {};
 
     // мы поддерживаем изображения только формата P6
     // с максимальным значением цвета 255
@@ -70,9 +67,7 @@ Image LoadPPM(const Path& file) {
 
     // пропускаем один байт - это конец строки
     const char next = ifs.get();
-    if (next != '\n') {
-        return {};
-    }
+    if (next != '\n') return {};
 
     Image result(w, h, Color::Black());
     std::vector<char> buff(w * 3);
@@ -80,6 +75,8 @@ Image LoadPPM(const Path& file) {
     for (int y = 0; y < h; ++y) {
         Color* line = result.GetLine(y);
         ifs.read(buff.data(), w * 3);
+
+        if (!ifs) return {};
 
         for (int x = 0; x < w; ++x) {
             line[x].r = static_cast<byte>(buff[x * 3 + 0]);

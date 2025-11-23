@@ -28,7 +28,7 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo) {
 
 FILE* OpenFileForWrite(const Path& file) {
 #ifdef _MSC_VER
-    return _wfopen(file.wstring().c_str(), "wb");
+    return _wfopen(file.wstring().c_str(), L"wb");
 #else
     return fopen(file.string().c_str(), "wb");
 #endif
@@ -36,7 +36,7 @@ FILE* OpenFileForWrite(const Path& file) {
 
 FILE* OpenFileForRead(const Path& file) {
 #ifdef _MSC_VER
-    return _wfopen(file.wstring().c_str(), "rb");
+    return _wfopen(file.wstring().c_str(), L"rb");
 #else
     return fopen(file.string().c_str(), "rb");
 #endif
@@ -45,9 +45,7 @@ FILE* OpenFileForRead(const Path& file) {
 bool SaveJPEG(const Path& file, const Image& image) {
     FILE* outfile = OpenFileForWrite(file);
 
-    if (!outfile) {
-        return false;
-    }
+    if (!outfile) return false;
 
     jpeg_compress_struct cinfo;
     jpeg_error_mgr jerr;
@@ -101,9 +99,7 @@ void SaveScanlineToImage(const JSAMPLE* row, int y, Image& out_image) {
 Image LoadJPEG(const Path& file) {
     FILE* infile = OpenFileForRead(file);
 
-    if (!infile) {
-        return {};
-    }
+    if (!infile) return {};
 
     jpeg_decompress_struct cinfo;
     my_error_mgr jerr;

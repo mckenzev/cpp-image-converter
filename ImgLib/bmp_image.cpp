@@ -48,9 +48,7 @@ static int GetBMPStride(int w) {
 bool SaveBMP(const Path& file, const Image& image) {
     ofstream fstream(file, ios::binary);
 
-    if (!fstream) {
-        return false;
-    }
+    if (!fstream) return false;
 
     int w = image.GetWidth();
     int h = image.GetHeight();
@@ -65,15 +63,11 @@ bool SaveBMP(const Path& file, const Image& image) {
 
     fstream.write(reinterpret_cast<char*>(&file_header), 14);
 
-    if (!fstream) {
-        return false;
-    }
+    if (!fstream) return false;
 
     fstream.write(reinterpret_cast<char*>(&info_header), 40);
 
-    if (!fstream) {
-        return false;
-    }
+    if (!fstream) return false;
 
     vector<unsigned char> buffer(GetBMPStride(w));
 
@@ -93,9 +87,7 @@ bool SaveBMP(const Path& file, const Image& image) {
 
         fstream.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
 
-        if (!fstream) {
-            return false;
-        }
+        if (!fstream) return false;
     }
 
     return true;
@@ -108,17 +100,6 @@ namespace {
     }
 
     bool IsCorrectInfoHeader(const BitmapInfoHeader& header) {
-        /*
-            Параметры для проверки
-
-            uint32_t header_size = 40u;
-            int32_t width; > 0
-            int32_t height; > 0
-            uint16_t planes = 1u;
-            uint16_t bits_per_pixel = 24u;
-            uint32_t compression = 0u;
-        */
-
         return header.header_size == 40u
             && header.width > 0
             && header.height > 0
@@ -131,9 +112,7 @@ namespace {
 
 Image LoadBMP(const Path& file) {
     ifstream fstream(file, ios::binary);
-    if (!fstream) {
-        return {};
-    }
+    if (!fstream) return {};
 
     BitmapFileHeader file_header;
     fstream.read(reinterpret_cast<char*>(&file_header), 14);
@@ -161,9 +140,7 @@ Image LoadBMP(const Path& file) {
 
         fstream.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
 
-        if (!fstream) {
-            return {};
-        }
+        if (!fstream) return {};
 
         for (int j = 0; j < w; ++j) {
             int buf_idx = j * 3;
